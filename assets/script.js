@@ -11,37 +11,60 @@
 // THEN I am again presented with current and future conditions for that city
 // WHEN I open the weather dashboard
 // THEN I am presented with the last searched city forecast
+var lastSearch = '';
 var prevSearched = [];
 
 $(document).ready(function () {
 
-    $('body').on('submit', function () {
-        event.preventDefault();
-        var lastSearch = $('#input-search-id').val();
-        console.log(prevSearched);
-
-        prevSearched.push(lastSearch);
-
-        localStorage.setItem('lastSearch', lastSearch);
-        localStorage.setItem('prevSearched', JSON.stringify(prevSearched));
-
-        renderList();
-    });
-
+    //render the items on the list and the most recently searched term
     function renderList() {
+
         $('#input-search-id').val('');
         $('#list-search-id').empty();
 
         if (localStorage.getItem('prevSearched')) {
             prevSearched = JSON.parse(localStorage.getItem('prevSearched'));
+            lastSearch = localStorage.getItem('lastSearch');
         };
 
-        $.each(prevSearched, function(index, value) {
+        $.each(prevSearched, function (index, value) {
             var newListItem = $('<li>').addClass('list-group-item').text(value);
             $('#list-search-id').append(newListItem);
         });
-        //search for lastSearch city and populate contents
-    }
+    };
+
+    //call the OpenWeather API and retrieve it's object
+    function getWeather(city) {
+
+        var APIkey = 'a41a22c92514a42b4ee583b6e06ed00d';
+        var queryURL = 'https://api.openweathermap.org/data/2.5/weather?q=' + city + '&appid=' + APIkey;
+
+        $.ajax({
+            url: queryURL,
+            method: 'GET'
+        }).then(function (response) {
+            console.log(response);
+        });
+
+    };
+
+    //when the search term is submitted
+    $('body').on('submit', function () {
+        event.preventDefault();
+        lastSearch = $('#input-search-id').val();
+
+        getWeather(lastSearch);
+
+        if (prevSearched.indexOf(lastSearch) === -1) {
+            prevSearched.push(lastSearch);
+
+            localStorage.setItem('lastSearch', lastSearch);
+            localStorage.setItem('prevSearched', JSON.stringify(prevSearched));
+        };
+
+        renderList();
+    });
+
     renderList();
 
 });
