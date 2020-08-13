@@ -44,6 +44,9 @@ $(document).ready(function () {
             method: 'GET'
         }).then(function (response) {
             console.log(response);
+
+            $("#weather-content-city-id").text(response.name);
+
         });
 
     };
