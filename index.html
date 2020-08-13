@@ -10,6 +10,14 @@
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
     integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
 
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="./assets/style.css">
+
+  <!-- moment.js -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.27.0/moment.min.js"
+    integrity="sha512-rmZcZsyhe0/MAjquhTgiUcb4d9knaFc7b5xAfju483gbEXTkeJRUMIPk6s3ySZMYUHEcjKbjLjyddGWMrNEvZg=="
+    crossorigin="anonymous"></script>
+
   <!-- Jquery -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.js"></script>
 
@@ -38,13 +46,18 @@
             </div>
           </div>
         </form>
+        <!-- List of Searched -->
         <ul class="list-group" id="list-search-id"></ul>
       </aside>
-      <!-- List of Searched -->
       <section class="col-9">
         <!-- Weather Content -->
         <div class="weather-content rounded border p-2 m-2" id='weather-content-id'>
-          <h3 id="weather-content-city-id"></h3>
+          <h3 class="d-inline" id="weather-content-city-id"></h3>
+          <img src="" class="d-inline" id="weather-content-icon-id">
+          <div id="weather-content-temp-id"></div>
+          <div id="weather-content-humidity-id"></div>
+          <div id="weather-content-windspeed-id"></div>
+          <div>UV Index:<span id="weather-content-uvindex-id"></span></div>
         </div>
         <!-- Five Day Forecast Cards -->
         <div class="five-day-forecast">

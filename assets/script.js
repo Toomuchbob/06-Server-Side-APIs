@@ -1,5 +1,5 @@
 // GIVEN a weather dashboard with form inputs
-// WHEN I search for a city
+    // WHEN I search for a city
 // THEN I am presented with current and future conditions for that city and that city is added to the search history
 // WHEN I view current weather conditions for that city
 // THEN I am presented with the city name, the date, an icon representation of weather conditions, the temperature, the humidity, the wind speed, and the UV index
@@ -11,8 +11,9 @@
 // THEN I am again presented with current and future conditions for that city
 // WHEN I open the weather dashboard
 // THEN I am presented with the last searched city forecast
-var lastSearch = '';
+var lastSearch;
 var prevSearched = [];
+var currentDate = moment().format('MM/DD/YYYY');
 
 $(document).ready(function () {
 
@@ -45,7 +46,13 @@ $(document).ready(function () {
         }).then(function (response) {
             console.log(response);
 
-            $("#weather-content-city-id").text(response.name);
+            $("#weather-content-icon-id").attr('src', 'http://openweathermap.org/img/wn/' + response.weather[0].icon + '.png');
+            $("#weather-content-city-id").text(response.name + " (" + currentDate + ")");
+            $('#weather-content-temp-id').html("Temperature: " + Math.floor((response.main.temp - 273.15) * 9 / 5 + 32) + " &degF");
+            $('#weather-content-humidity-id').text("Humidity: " + response.main.humidity + "%");
+            $('#weather-content-windspeed-id').text("Wind Speed: " + response.wind.speed + " MPH");
+
+            
 
         });
 
@@ -66,6 +73,10 @@ $(document).ready(function () {
         };
 
         renderList();
+    });
+
+    $('#list-search-id').on('click', '.list-group-item', function() {
+        getWeather($(this).text());
     });
 
     renderList();
