@@ -11,7 +11,10 @@
     integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
 
   <!-- Jquery -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+  <!-- Main JS -->
+  <script src="./assets/script.js"></script>
 
   <title>Weather Dashboard</title>
 
@@ -29,28 +32,34 @@
     <main class="row">
       <aside class="col-3">
         <h5>Search for a City:</h5>
-        <div class="input-group mb-3">
-          <input type="text" class="form-control">
-          <div class="input-group-append">
-            <button class="btn btn-primary" type="button" id="button-addon2">Search</button>
+        <!-- Search Form -->
+        <form>
+          <div class="input-group mb-3">
+            <input type="text" class="form-control" id="input-search-id">
+            <div class="input-group-append">
+              <button class="btn btn-primary form-control" type="submit" id="button-search-id">Search</button>
+            </div>
           </div>
-        </div>
-        <!-- List of Searched -->
-        <ul class="list-group"></ul>
+        </form>
+        <ul class="list-group" id="list-search-id"></ul>
       </aside>
-      <section class="col-9">
-        <!-- Weather Content -->
-        <div class="weather-content"></div>
-        <!-- Five Day Forecast Cards -->
-        <div class="five-day-forecast">
-          <div class="forecast-card-1"></div>
-          <div class="forecast-card-2"></div>
-          <div class="forecast-card-3"></div>
-          <div class="forecast-card-4"></div>
-          <div class="forecast-card-5"></div>
-        </div>
-      </section>
     </main>
+  </div>
+  <!-- List of Searched -->
+  </aside>
+  <section class="col-9">
+    <!-- Weather Content -->
+    <div class="weather-content"></div>
+    <!-- Five Day Forecast Cards -->
+    <div class="five-day-forecast">
+      <div class="forecast-card-1"></div>
+      <div class="forecast-card-2"></div>
+      <div class="forecast-card-3"></div>
+      <div class="forecast-card-4"></div>
+      <div class="forecast-card-5"></div>
+    </div>
+  </section>
+  </main>
   </div>
 
   <!-- Optional JavaScript -->
