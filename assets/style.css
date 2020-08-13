@@ -2,3 +2,7 @@
     color: #0275d8;
     border-width: 2px;
 }
+
+#weather-content-uvindex-id {
+    display: inline-block !important;
+}
