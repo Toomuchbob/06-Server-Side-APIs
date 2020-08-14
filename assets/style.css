@@ -6,3 +6,7 @@
 #weather-content-uvindex-id {
     display: inline-block !important;
 }
+
+div[class^='forecast-card'] {
+    display: inline-block !important;
+}

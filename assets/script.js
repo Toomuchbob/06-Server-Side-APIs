@@ -1,31 +1,31 @@
-// WHEN I view future weather conditions for that city
-// THEN I am presented with a 5-day forecast that displays the date, an icon representation of weather conditions, the temperature, and the humidity
-
 var lastSearch;
 var prevSearched = [];
 var currentDate = moment().format('MM/DD/YYYY');
 
 var weatherEl = $('#weather-content-id');
-var weatherIconEl  = $("#weather-content-icon-id");
-var weatherCityEl  = $("#weather-content-city-id");
-var weatherTempEl  = $('#weather-content-temp-id');
+var weather5Day = $('.five-day-forecast');
+var weatherIconEl = $("#weather-content-icon-id");
+var weatherCityEl = $("#weather-content-city-id");
+var weatherTempEl = $('#weather-content-temp-id');
 var weatherHumidEl = $('#weather-content-humidity-id');
-var weatherWindEl  = $('#weather-content-windspeed-id');
+var weatherWindEl = $('#weather-content-windspeed-id');
 var weatherUvIndexEl = $('#weather-content-uvindex-id');
 
 $(document).ready(function () {
+    
+    if (localStorage.getItem('lastSearch')) {
+        prevSearched = JSON.parse(localStorage.getItem('prevSearched'));
+        lastSearch = localStorage.getItem('lastSearch');
+        getWeather(lastSearch);
+    };
 
     //render the items on the list and the most recently searched term
     function renderList() {
 
         $('#input-search-id').val('');
         $('#list-search-id').empty();
+        $("[class^='forecast-card']").empty();
 
-        if (localStorage.getItem('lastSearch')) {
-            prevSearched = JSON.parse(localStorage.getItem('prevSearched'));
-            lastSearch = localStorage.getItem('lastSearch');
-            getWeather(lastSearch);
-        };
 
         $.each(prevSearched, function (index, value) {
             var newListItem = $('<li>').addClass('list-group-item').text(value);
@@ -37,23 +37,39 @@ $(document).ready(function () {
     function getWeather(city) {
 
         var APIkey = 'a41a22c92514a42b4ee583b6e06ed00d';
-        var queryURL = 'https://api.openweathermap.org/data/2.5/weather?q=' + city + '&appid=' + APIkey;
+        var queryURL = 'https://api.openweathermap.org/data/2.5/forecast?q=' + city + '&appid=' + APIkey;
 
         $.ajax({
             url: queryURL,
             method: 'GET'
         }).then(function (response) {
+            console.log(response);
 
             weatherEl.removeClass('d-none');
+            weather5Day.removeClass('d-none');
 
-            weatherIconEl.attr('src', 'http://openweathermap.org/img/wn/' + response.weather[0].icon + '.png');
-            weatherCityEl.text(response.name + " (" + currentDate + ")");
-            weatherTempEl.html("Temperature: " + Math.floor((response.main.temp - 273.15) * 9 / 5 + 32) + " &degF");
-            weatherHumidEl.text("Humidity: " + response.main.humidity + "%");
-            weatherWindEl.text("Wind Speed: " + response.wind.speed + " MPH");
+            weatherIconEl.attr('src', 'http://openweathermap.org/img/wn/' + response.list[0].weather[0].icon + '.png');
+            weatherCityEl.text(response.city.name + " (" + currentDate + ")");
+            weatherTempEl.html("Temperature: " + Math.floor((response.list[0].main.temp - 273.15) * 9 / 5 + 32) + " &degF");
+            weatherHumidEl.text("Humidity: " + response.list[0].main.humidity + "%");
+            weatherWindEl.text("Wind Speed: " + response.list[0].wind.speed + " MPH");
+
+            for (let i = 1; i < 6; i++) {
+                var forecastCard = $('.forecast-card-' + i);
+                
+                var cardDate = moment().add(i, 'days').format('MM/DD/YYYY');
+
+                var forecastDate = $('<h5>').text(cardDate);
+                var forecastIcon = $('<img>').attr('src', 'http://openweathermap.org/img/wn/' + response.list[i].weather[0].icon + '.png');
+                var forecastTemp = $('<p>').html("Temperature: " + Math.floor((response.list[i].main.temp - 273.15) * 9 / 5 + 32) + " &degF");
+                var forecastHumid = $('<p>').text("Humidity: " + response.list[i].main.humidity + "%");
+
+                forecastCard.append(forecastDate, forecastIcon, forecastTemp, forecastHumid);
+
+            }
 
             $.ajax({
-                url: "https://api.openweathermap.org/data/2.5/uvi?lat=" + response.coord.lat + "&lon=" + response.coord.lon + "&appid=" + APIkey,
+                url: "https://api.openweathermap.org/data/2.5/uvi?lat=" + response.city.coord.lat + "&lon=" + response.city.coord.lon + "&appid=" + APIkey,
                 method: 'GET'
             }).then(function (uvResponse) {
 
@@ -90,10 +106,12 @@ $(document).ready(function () {
         renderList();
     });
 
-    $('#list-search-id').on('click', '.list-group-item', function() {
+    $('#list-search-id').on('click', '.list-group-item', function () {
         getWeather($(this).text());
         lastSearch = $(this).text();
         localStorage.setItem('lastSearch', lastSearch);
+
+        renderList();
     });
 
     renderList();
